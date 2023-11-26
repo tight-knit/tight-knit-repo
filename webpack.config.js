@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = [
@@ -21,9 +21,20 @@ module.exports = [
         template: "./frontend/index.html",
       }),
     ],
+    // Proxy configuration to redirect API calls to Express server
     devServer: {
       static: {
         directory: path.join(__dirname, "./dist"),
+      },
+      proxy: {
+        "/api/**": {
+          target: "http://localhost:3000/",
+          secure: false,
+        },
+        "/assets/**": {
+          target: "http://localhost:3000/",
+          secure: false,
+        },
       },
     },
     // if webpack sees any files w/ these extensions use the specified loader
