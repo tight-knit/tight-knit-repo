@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = [
@@ -15,15 +15,34 @@ module.exports = [
       filename: "bundle.js",
       clean: true,
     },
-    // The plugin will generate an HTML5 file for you that includes all your webpack bundles in the body using script tags
+    // The plugin will generate an HTML5 file for you 
+    // that includes all your webpack bundles in the body using script tags
     plugins: [
       new HtmlWebpackPlugin({
         template: "./frontend/index.html",
       }),
     ],
+    // Proxy configuration to redirect API calls to Express server
     devServer: {
       static: {
         directory: path.join(__dirname, "./dist"),
+      },
+      headers: { "Access-Control-Allow-Origin": "*" },
+      /**
+       * proxy is required in order to make api calls to
+       * express server while using hot-reload webpack server
+       * routes api fetch requests from localhost:8080/api/* (webpack dev server)
+       * to localhost:3000/api/* (where our Express server is running)
+       */
+      proxy: {
+        "/api/**": {
+          target: "http://localhost:3000/",
+          secure: false,
+        },
+        "/assets/**": {
+          target: "http://localhost:3000/",
+          secure: false,
+        },
       },
     },
     // if webpack sees any files w/ these extensions use the specified loader
@@ -54,7 +73,8 @@ module.exports = [
         {
           test: /\.(png|jp(e*)g|svg|gif)$/,
           exclude: /node_modules/,
-          //file-loader resolves import/require() on a file into a url and emits the file into the output directory.
+          // file-loader resolves import/require() on a file into a url 
+          // and emits the file into the output directory.
           use: ["file-loader"],
         },
       ],
