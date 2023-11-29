@@ -1,8 +1,13 @@
 const express = require("express");
 const db = require("./model/db");
-const cookieParser = require('cookie-parser');
-const path = require('path');
-const cors = require('cors');
+const cookieParser = require("cookie-parser");
+const path = require("path");
+const cors = require("cors");
+
+const jobsRouter = require("../backend/routes/api");
+const usersRouter = require("../backend/routes/api");
+const locationRouter = require("../backend/routes/api");
+const tagsRouter = require("../backend/routes/api");
 
 const app = express();
 
@@ -14,9 +19,10 @@ app.use(cookieParser());
 
 // db.connect();
 
-app.get("/", (req, res) => {
-  res.status(200).send(`<h1>Hello from the server</h1>`);
-});
+app.use("/", jobsRouter);
+app.use("/users", usersRouter);
+app.use("/location", locationRouter);
+app.use("/tags", tagsRouter);
 
 // global error handler
 app.use((err, req, res, next) => {
