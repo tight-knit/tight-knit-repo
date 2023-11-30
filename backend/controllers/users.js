@@ -46,4 +46,26 @@ const getUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllUsers, getUser };
+// post user, creating a new record
+const postUser = async (req, res, next) => {
+  try {
+    const { firstname, lastname, email, username, password } = req.body;
+    // create query
+    const sqlQuery = `INSERT INTO users (firstname, lastname, email, username, password) VALUES ('${firstname}', '${lastname}', '${email}', '${username}', '${password}')`;
+    db.query(sqlQuery).then((response) => {
+      // console.log(`===== postUser response: ${response.rows}`);
+      // res.locals.postUser = response.rows;
+      return next();
+    });
+  } catch (error) {
+    console.log("This is the error: ", error);
+    next({
+      log: "Express error handler caught unknown middleware error",
+      message: {
+        err: "An error occurred in userController.postUser",
+      },
+    });
+  }
+};
+
+module.exports = { getAllUsers, getUser, postUser };
