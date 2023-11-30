@@ -20,4 +20,28 @@ const getAllCities = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllCities };
+const postAllCities = async (req, res, next) => {
+  try {
+    // may need to change req.body.locaiton later
+    const {citystate} = req.body
+    // create query
+    const sqlQuery = `INSERT INTO citystate (citystate) VALUES ('${citystate}')`;
+    db.query(sqlQuery).then((response) => {
+      console.log(`===== postAllCities response: ${response.rows}`);
+      // check if city already exist if so don't add again
+
+    //   res.locals.postAllCities = response.rows;
+      return next();
+    });
+  } catch (error) {
+    console.log("This is the error: ", error);
+    next({
+      log: "Express error handler caught unknown middleware error",
+      message: {
+        err: "An error occurred in cityController.postAllCities",
+      },
+    });
+  }
+};
+
+module.exports = { getAllCities, postAllCities };

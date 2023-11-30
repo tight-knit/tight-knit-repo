@@ -21,4 +21,27 @@ const getJobs = async (req, res, next) => {
   }
 };
 
-module.exports = { getJobs };
+// post jobs
+const postJobs = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const { title, description, link } = req.body;
+    // create query
+    const sqlQuery = `INSERT INTO jobs (title, description, link) VALUES ('${title}', '${description}', '${link}')`;
+    db.query(sqlQuery).then((response) => {
+      console.log(`===== postJobs response: ${response.rows}`);
+      //   res.locals.postJobs = response.rows;
+      return next();
+    });
+  } catch (error) {
+    console.log("This is the error: ", error);
+    next({
+      log: "Express error handler caught unknown middleware error",
+      message: {
+        err: "An error occurred in jobsController.postJobs",
+      },
+    });
+  }
+};
+
+module.exports = { getJobs, postJobs };
