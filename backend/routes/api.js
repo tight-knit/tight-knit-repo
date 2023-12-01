@@ -30,7 +30,7 @@ router.get("/tags", tagsController.getAllTags, (req, res) => {
 });
 
 // posts
-router.post("/jobs", jobsController.postJobs, (req, res) => {
+router.post("/jobs", jobsController.postJob, (req, res) => {
   res.status(200).json({ msg: "jobs post successful" });
 });
 
@@ -38,11 +38,11 @@ router.post("/users", usersController.postUser, (req, res) => {
   res.status(200).json({ msg: "users post successful" });
 });
 
-router.post("/location", locationController.postAllCities, (req, res) => {
+router.post("/location", locationController.postCity, (req, res) => {
   res.status(200).json({ msg: "cities post successful" });
 });
 
-router.post("/tags", tagsController.postAllTags, (req, res) => {
+router.post("/tags", tagsController.postTag, (req, res) => {
   res.status(200).json({ msg: "tags post successful" });
 });
 

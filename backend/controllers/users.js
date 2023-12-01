@@ -1,15 +1,15 @@
 const db = require("../model/db");
 
-//getAllUsers
+//get all users
 const getAllUsers = async (req, res, next) => {
   try {
     // create query
     const sqlQuery = `SELECT * FROM "public"."users" LIMIT 100`;
-    db.query(sqlQuery).then((response) => {
-      console.log(`===== getAllUsers response: ${response.rows}`);
-      res.locals.getAllUsers = response.rows;
-      return next();
-    });
+    const response = await db.query(sqlQuery);
+
+    // console.log(`===== getAllUsers response: ${response.rows}`);
+    res.locals.getAllUsers = response.rows;
+    return next();
   } catch (error) {
     console.log("This is the error: ", error);
     next({
@@ -25,16 +25,20 @@ const getAllUsers = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   try {
     const id = req.params.id;
-    console.log(`==== id variable: ${id}`);
+    // console.log(`==== id variable: ${id}`);
     // create query
     // SELECT DISTINCT ON (column_name) * FROM users WHERE column_name = $1;
 
     const sqlQuery = `SELECT DISTINCT ON (user_id) * FROM users WHERE user_id = $1`;
-    db.query(sqlQuery, [id]).then((response) => {
-      console.log(`===== getUser response: ${response.rows}`);
-      res.locals.getUser = response.rows;
-      return next();
-    });
+    const response = await db.query(sqlQuery, [id]);
+    // no user found with id, response with 404 status code
+    if (response.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // console.log(`===== getUser response: ${response.rows}`);
+    res.locals.getUser = response.rows;
+    return next();
   } catch (error) {
     console.log("This is the error: ", error);
     next({
@@ -52,11 +56,11 @@ const postUser = async (req, res, next) => {
     const { firstname, lastname, email, username, password } = req.body;
     // create query
     const sqlQuery = `INSERT INTO users (firstname, lastname, email, username, password) VALUES ('${firstname}', '${lastname}', '${email}', '${username}', '${password}')`;
-    db.query(sqlQuery).then((response) => {
-      // console.log(`===== postUser response: ${response.rows}`);
-      // res.locals.postUser = response.rows;
-      return next();
-    });
+    const response = await db.query(sqlQuery);
+
+    // console.log(`===== postUser response: ${response.rows}`);
+    // res.locals.postUser = response.rows;
+    return next();
   } catch (error) {
     console.log("This is the error: ", error);
     next({
