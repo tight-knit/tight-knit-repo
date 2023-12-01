@@ -7,7 +7,7 @@ const getAllUsers = async (req, res, next) => {
     const sqlQuery = `SELECT * FROM "public"."users" LIMIT 100`;
     const response = await db.query(sqlQuery);
 
-    console.log(`===== getAllUsers response: ${response.rows}`);
+    // console.log(`===== getAllUsers response: ${response.rows}`);
     res.locals.getAllUsers = response.rows;
     return next();
   } catch (error) {
@@ -25,14 +25,18 @@ const getAllUsers = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   try {
     const id = req.params.id;
-    console.log(`==== id variable: ${id}`);
+    // console.log(`==== id variable: ${id}`);
     // create query
     // SELECT DISTINCT ON (column_name) * FROM users WHERE column_name = $1;
 
     const sqlQuery = `SELECT DISTINCT ON (user_id) * FROM users WHERE user_id = $1`;
     const response = await db.query(sqlQuery, [id]);
+    // no user found with id, response with 404 status code
+    if (response.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-    console.log(`===== getUser response: ${response.rows}`);
+    // console.log(`===== getUser response: ${response.rows}`);
     res.locals.getUser = response.rows;
     return next();
   } catch (error) {

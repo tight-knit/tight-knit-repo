@@ -20,7 +20,7 @@ const getAllTags = async (req, res, next) => {
   }
 };
 
-const postAllTags = async (req, res, next) => {
+const postTag = async (req, res, next) => {
   try {
     const { tag } = req.body;
 
@@ -44,4 +44,4 @@ const postAllTags = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllTags, postAllTags };
+module.exports = { getAllTags, postTag };

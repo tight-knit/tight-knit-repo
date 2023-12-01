@@ -20,7 +20,7 @@ const getAllCities = async (req, res, next) => {
   }
 };
 
-const postAllCities = async (req, res, next) => {
+const postCity = async (req, res, next) => {
   try {
     // may need to change req.body.locaiton later
     const { citystate } = req.body;
@@ -45,4 +45,4 @@ const postAllCities = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllCities, postAllCities };
+module.exports = { getAllCities, postCity };

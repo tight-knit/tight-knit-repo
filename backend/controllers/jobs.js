@@ -22,7 +22,7 @@ const getJobs = async (req, res, next) => {
 };
 
 // post jobs
-const postJobs = async (req, res, next) => {
+const postJob = async (req, res, next) => {
   try {
     console.log(req.body);
     const { title, description, link } = req.body;
@@ -45,4 +45,4 @@ const postJobs = async (req, res, next) => {
   }
 };
 
-module.exports = { getJobs, postJobs };
+module.exports = { getJobs, postJob };
